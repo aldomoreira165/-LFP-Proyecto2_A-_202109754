@@ -77,7 +77,9 @@ class VentanaPrincipal:
             self.scrolledtext1.insert('1.0', contenido)
             
     def obtener_tokens(self):
-        analizador = AnalizadorLexico(contenido)
-        analizador.ejecutar()
+        analizador = AnalizadorLexico()
+        analizador.analizar('Hola')
+        analizador.imprimir_tokens()
+        analizador.imprimir_errores()
             
 ventana = VentanaPrincipal()

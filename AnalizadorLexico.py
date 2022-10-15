@@ -14,12 +14,12 @@ class AnalizadorLexico():
         self.estado = 0
         self.i = 0
         
-    def agregar_token(self, caracter, linea, columna, token):
-        self.lista_tokens.append(Token(caracter, linea, columna, token))
+    def agregar_token(self, numero, tipo, lexema):
+        self.lista_tokens.append(Token(numero, tipo, lexema))
         self.buffer = ''
         
     def agregar_error(self, caracter, linea, columna):
-        self.lista_errores.append(Error(f'Caracter {caracter} no reconocido en el lenguaje.', linea, columna))
+        self.lista_errores.append(Error(f'Caracter {caracter}', linea, columna))
         
     def s0(self, caracter):
         #estado S0
@@ -35,9 +35,11 @@ class AnalizadorLexico():
             self.estado = 3
             self.buffer += caracter 
             self.columna += 1
+        elif caracter == '$':
+            print('Análisis terminado')
         else:
             self.agregar_error(caracter, self.linea, self.columna)
-            self.i -= 1
+            self.columna += 1
             
     def s1(self, caracter):
         if caracter == '!':
@@ -46,7 +48,7 @@ class AnalizadorLexico():
             self.columna += 1
         else:
             self.agregar_error(caracter, self.linea, self.columna)
-            self.i -= 1
+            self.columna += 1
             
     def s2(self, caracter):
         if caracter.isalpha():
@@ -58,7 +60,7 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_token(2, 'Componente/ID', self.buffer)
+            self.agregar_token(1, 'Componente/ID', self.buffer)
             self.estado = 0
             self.i -= 1
             
@@ -73,7 +75,7 @@ class AnalizadorLexico():
             self.columna += 1
         else:
             self.agregar_error(caracter, self.linea, self.columna)
-            self.i -= 1
+            self.columna += 1
             
     def s5(self, caracter):
         if caracter == '-':
@@ -82,7 +84,7 @@ class AnalizadorLexico():
             self.columna += 1
         else:
             self.agregar_error(caracter, self.linea, self.columna)
-            self.i -= 1
+            self.columna += 1
             
     def s6(self, caracter):
         if caracter == '-':
@@ -91,7 +93,7 @@ class AnalizadorLexico():
             self.columna += 1
         else:
             self.agregar_error(caracter, self.linea, self.columna)
-            self.i -= 1
+            self.columna += 1
             
     def s7(self, caracter):
         if caracter == '>':
@@ -100,6 +102,7 @@ class AnalizadorLexico():
             self.columna += 1
         else:
             self.agregar_error(caracter, self.linea, self.columna)
+            self.columna += 1
             self.i -= 1
             
     def s8(self, caracter):
@@ -109,6 +112,7 @@ class AnalizadorLexico():
             self.columna += 1
         else:
             self.agregar_error(caracter, self.linea, self.columna)
+            self.columna += 1
             self.i -= 1
             
     def s9(self, caracter):
@@ -126,6 +130,7 @@ class AnalizadorLexico():
             self.i -= 1
             
     def analizar(self, cadena):
+        cadena += '$'
         self.lista_errores = []
         self.lista_tokens = []
         self.i = 0
@@ -152,7 +157,6 @@ class AnalizadorLexico():
                 self.s9(cadena[self.i])
             elif self.estado == 10:
                 self.s10(cadena[self.i])
-            
             self.i += 1
             
     def imprimir_tokens(self):

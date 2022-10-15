@@ -78,7 +78,7 @@ class VentanaPrincipal:
             
     def obtener_tokens(self):
         analizador = AnalizadorLexico()
-        analizador.analizar('Hola')
+        analizador.analizar('<--Hola')
         analizador.imprimir_tokens()
         analizador.imprimir_errores()
             

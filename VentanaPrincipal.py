@@ -6,6 +6,7 @@ from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 from AnalizadorLexico import AnalizadorLexico
 from VentanaTokens import VentanaTokens
+from VentanaErrores import VentanaErrores
 
 class VentanaPrincipal:
     
@@ -42,7 +43,8 @@ class VentanaPrincipal:
         
         #cascada de menu errores
         menu_errores = tk.Menu(barra_menus, tearoff=False)
-        menu_errores.add_cascade(label='Ver Errores')
+        menu_errores.add_cascade(label='Ver Errores', command=self.abrir_ventana_errores)
+        barra_menus.add_cascade(menu=menu_errores, label='Errores')
         
         self.ventana.config(menu=barra_menus, bg='#8FEBD6')
 
@@ -74,6 +76,10 @@ class VentanaPrincipal:
         mb.showinfo('información', 'El archivo se guardó correctamente')
     
     def abrir(self):
+        #inicializando listas
+        self.lista_tokens = []
+        self.lista_errores = []
+        
         self.nombre_archivo = fd.askopenfilename(title='Seleccione el archivo', filetypes=(('gpw file', '*.gpw'), ('todos los arhivos', '*.*')))
         if self.nombre_archivo != '':
             archivo = open(self.nombre_archivo, 'r', encoding='utf-8')
@@ -86,6 +92,8 @@ class VentanaPrincipal:
     def abrir_ventana_tokens(self):
         ventana_tokens = VentanaTokens(self.lista_tokens)
         
+    def abrir_ventana_errores(self):
+        ventana_errores = VentanaErrores(self.lista_errores)
                  
     def generar_pagina_web(self):
         #realizando analisis lexico
@@ -93,6 +101,8 @@ class VentanaPrincipal:
         analizador_lexico.analizar()
         #obteniendo lista de tokens del analisis lexico
         self.lista_tokens += analizador_lexico.obtener_lista_tokens()
+        #obteniendo lista de errores del analisis lexico
+        self.lista_errores += analizador_lexico.obtener_lista_errores()
         
         
         

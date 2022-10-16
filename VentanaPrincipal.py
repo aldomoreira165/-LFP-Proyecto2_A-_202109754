@@ -5,6 +5,7 @@ from tkinter.font import BOLD
 from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 from AnalizadorLexico import AnalizadorLexico
+from VentanaTokens import VentanaTokens
 
 class VentanaPrincipal:
     
@@ -34,8 +35,12 @@ class VentanaPrincipal:
         
         #cascada de menu tokens
         menu_tokens = tk.Menu(barra_menus, tearoff=False)
-        menu_tokens.add_cascade(label='Ver Tokens', command=self.obtener_tokens)
+        menu_tokens.add_cascade(label='Ver Tokens', command=self.abrir_ventana_tokens)
         barra_menus.add_cascade(menu=menu_tokens, label='Tokens')
+        
+        #cascada de menu errores
+        menu_errores = tk.Menu(barra_menus, tearoff=False)
+        menu_errores.add_cascade(label='Ver Errores')
         
         self.ventana.config(menu=barra_menus, bg='#8FEBD6')
 
@@ -76,10 +81,16 @@ class VentanaPrincipal:
             self.scrolledtext1.delete('1.0', tk.END)
             self.scrolledtext1.insert('1.0', contenido)
             
-    def obtener_tokens(self):
-        analizador = AnalizadorLexico()
-        analizador.analizar('<--Hola')
-        analizador.imprimir_tokens()
-        analizador.imprimir_errores()
-            
+    def abrir_ventana_tokens(self):
+        ventana_tokens = VentanaTokens()
+        
+                 
+    def generar_pagina_web(self):
+        #realizando analisis lexico
+        analizador_lexico = AnalizadorLexico(contenido)
+        analizador_lexico.analizar()
+        
+        
+        
+        
 ventana = VentanaPrincipal()

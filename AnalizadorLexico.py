@@ -177,19 +177,11 @@ class AnalizadorLexico():
                     self.i += 1
             self.linea += 1          
             
-    def imprimir_tokens(self):
-        x = PrettyTable()
-        x.field_names = ['Numero', 'Tipo', 'Lexema']
-        for token in self.lista_tokens:
-            x.add_row([token.numero, token.tipo, token.lexema])
-        print(x)
+    def obtener_lista_tokens(self):
+        return self.lista_tokens
         
-    def imprimir_errores(self):
-        x = PrettyTable()
-        x.field_names = ['Tipo error', 'Linea', 'Columna', 'Descripcion']
-        for error_ in self.lista_errores:
-            x.add_row([error_.tipo, error_.linea, error_.columna, error_.descripcion])
-        print(x)
+    def obtener_lista_errores(self):
+        return self.lista_errores
         
         
         

@@ -10,6 +10,8 @@ from VentanaTokens import VentanaTokens
 class VentanaPrincipal:
     
     def __init__(self):
+        self.lista_tokens = []
+        self.lista_errores = []
         self.ventana = tk.Tk()
         self.agregar_menu()
         self.scrolledtext1 = st.ScrolledText(self.ventana, width=50, height=20)
@@ -30,7 +32,7 @@ class VentanaPrincipal:
         
         #cascada de menu analisis
         menu_analisis = tk.Menu(barra_menus, tearoff=False)
-        menu_analisis.add_command(label='Generar Página Web', command=self.salir)
+        menu_analisis.add_command(label='Generar Página Web', command=self.generar_pagina_web)
         barra_menus.add_cascade(menu=menu_analisis, label='Análisis')
         
         #cascada de menu tokens
@@ -82,13 +84,15 @@ class VentanaPrincipal:
             self.scrolledtext1.insert('1.0', contenido)
             
     def abrir_ventana_tokens(self):
-        ventana_tokens = VentanaTokens()
+        ventana_tokens = VentanaTokens(self.lista_tokens)
         
                  
     def generar_pagina_web(self):
         #realizando analisis lexico
         analizador_lexico = AnalizadorLexico(contenido)
         analizador_lexico.analizar()
+        #obteniendo lista de tokens del analisis lexico
+        self.lista_tokens += analizador_lexico.obtener_lista_tokens()
         
         
         

@@ -19,8 +19,8 @@ class AnalizadorLexico():
         self.lista_tokens.append(Token(numero, tipo, lexema))
         self.buffer = ''
         
-    def agregar_error(self, tipo, linea, columna, caracter):
-        self.lista_errores.append(Error(tipo, linea, columna, f'Caracter {caracter}', ))
+    def agregar_error(self, tipo, linea, columna, tokenEsperado, caracter):
+        self.lista_errores.append(Error(tipo, linea, columna, tokenEsperado, f'Caracter {caracter}', ))
      
     #estados del dfa    
     def s0(self, caracter):
@@ -38,9 +38,9 @@ class AnalizadorLexico():
             self.buffer += caracter 
             self.columna += 1
         elif caracter == '$':
-            print('Análisis terminado')
+            pass
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, '<, Letra, ;', caracter)
             self.columna += 1
             
     def s1(self, caracter):
@@ -49,8 +49,10 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, '!', caracter)
+            self.estado = 4
             self.columna += 1
+            self.i -= 1
             
     def s2(self, caracter):
         if caracter.isalpha() or caracter.isdigit():
@@ -76,8 +78,10 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, '-', caracter)
+            self.estado = 6
             self.columna += 1
+            self.i -= 1
             
     def s5(self, caracter):
         if caracter == '-':
@@ -85,8 +89,10 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, '-',caracter)
+            self.estado = 7
             self.columna += 1
+            self.i -= 1
             
     def s6(self, caracter):
         if caracter == '-':
@@ -94,16 +100,19 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, '-', caracter)
+            self.estado = 8
             self.columna += 1
-            
+            self.i -= 1
+             
     def s7(self, caracter):
         if caracter == '>':
             self.estado = 9
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, '>', caracter)
+            self.estado = 9
             self.columna += 1
             self.i -= 1
             
@@ -113,14 +122,14 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, 'Letra', caracter)
+            self.estado = 10
             self.columna += 1
             self.i -= 1
             
     def s9(self, caracter):
         self.agregar_token(4, 'Cierre', self.buffer)
         self.estado = 0
-        self.i -= 1
             
     def s10(self, caracter):
         if caracter.isalpha():
@@ -175,7 +184,7 @@ class AnalizadorLexico():
                     elif self.estado == 10:
                         self.s10(cadena[self.i])
                     self.i += 1
-            self.linea += 1          
+            self.linea += 1        
             
     def obtener_lista_tokens(self):
         return self.lista_tokens

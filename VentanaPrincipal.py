@@ -96,6 +96,8 @@ class VentanaPrincipal:
         ventana_errores = VentanaErrores(self.lista_errores)
                  
     def generar_pagina_web(self):
+        self.lista_tokens = []
+        self.lista_errores = []
         #realizando analisis lexico
         analizador_lexico = AnalizadorLexico(contenido)
         analizador_lexico.analizar()
@@ -103,6 +105,11 @@ class VentanaPrincipal:
         self.lista_tokens += analizador_lexico.obtener_lista_tokens()
         #obteniendo lista de errores del analisis lexico
         self.lista_errores += analizador_lexico.obtener_lista_errores()
+        
+        if len(self.lista_errores) == 0:
+            print('Iniciando generación de página web')
+        else:
+            print('El archivo de entrada contiene errores de tipo léxico o sintáctico.')
         
         
         

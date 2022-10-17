@@ -14,7 +14,8 @@ class AnalizadorLexico():
         self.i = 0
         self.reservadas = ['controles', 'propiedades', 'colocacion', 'colocación']
         self.controles = ['etiqueta', 'boton', 'check', 'radioboton', 'texto', 'areatexto', 'clave', 'contenedor']
-                
+        self.propiedades = ['id', 'setcolorletra', 'settexto', 'setalineacion', 'setcolorfondo', 'setmarcada', 'setgrupo', 'setancho', 'setalto']
+        self.colocaciones = ['setposicion', 'add']         
         
     def agregar_token(self, numero, tipo, lexema):
         self.lista_tokens.append(Token(numero, tipo, lexema))
@@ -90,13 +91,21 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            
-            self.agregar_token(1, 'Reservada/Propiedad', self.buffer)
+            if self.buffer.lower() in self.reservadas:
+                self.agregar_token(1, 'Reservada', self.buffer)
+            elif self.buffer.lower() in self.propiedades:
+                self.agregar_token(2, 'Propiedad', self.buffer)
+            elif self.buffer.lower() in self.controles:
+                self.agregar_token(3, 'Control', self.buffer)
+            elif self.buffer.lower() in self.colocaciones:
+                self.agregar_token(4, 'Posicion', self.buffer)
+            else:
+                self.agregar_token(14, 'Identificador', self.buffer)
             self.estado = 0
             self.i -= 1
             
     def s2(self, caracter):
-        self.agregar_token(2, 'Punto y coma', self.buffer)
+        self.agregar_token(4, 'Punto y coma', self.buffer)
         self.estado = 0
         self.i -= 1
             
@@ -106,52 +115,52 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_token(3, 'Valor', self.buffer)
+            self.agregar_token(5, 'Valor', self.buffer)
             self.estado = 0
             self.i -= 1
             
     def s4(self, caracter):
-        self.agregar_token(4, 'Punto', self.buffer)
+        self.agregar_token(6, 'Punto', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s5(self, caracter):
-        self.agregar_token(5, 'Coma', self.buffer)
+        self.agregar_token(7, 'Coma', self.buffer)
         self.estado = 0
         self.i -= 1
     
     def s6(self, caracter):
-        self.agregar_token(6, 'Paréntesis izquierdo', self.buffer)
+        self.agregar_token(8, 'Paréntesis izquierdo', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s7(self, caracter):
-        self.agregar_token(7, 'Paréntesis derecho', self.buffer)
+        self.agregar_token(9, 'Paréntesis derecho', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s8(self, caracter):
-        self.agregar_token(8, 'Mayor que', self.buffer)
+        self.agregar_token(10, 'Mayor que', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s9(self, caracter):
-        self.agregar_token(9, 'Menor que', self.buffer)
+        self.agregar_token(11, 'Menor que', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s10(self, caracter):
-        self.agregar_token(10, 'Guion', self.buffer)
+        self.agregar_token(12, 'Guion', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s11(self, caracter):
-        self.agregar_token(11, 'Admiración', self.buffer)
+        self.agregar_token(13, 'Admiración', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s12(self, caracter):
-        self.agregar_token(12, 'Comillas', self.buffer)
+        self.agregar_token(14, 'Comillas', self.buffer)
         self.estado = 0
         self.i -= 1
             
@@ -161,7 +170,7 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_token(13, 'Control/Identificador', self.buffer)
+            self.agregar_token(14, 'Identificador', self.buffer)
             self.estado = 0
             self.i -= 1
      

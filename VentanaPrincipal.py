@@ -11,15 +11,20 @@ from VentanaErrores import VentanaErrores
 class VentanaPrincipal:
     
     def __init__(self):
-        self.lista_tokens = []
-        self.lista_errores = []
+        #creacion de ventana
         self.ventana = tk.Tk()
         self.agregar_menu()
-        self.scrolledtext1 = st.ScrolledText(self.ventana, width=50, height=20)
-        self.scrolledtext1.grid(column=0, row=0, padx=10, pady=10)
+        self.scrolledtext1 = st.ScrolledText(self.ventana, width=70, height=35)
+        self.scrolledtext1.grid(column=0, row=0, padx=20, pady=20)
         tk.Wm.title(self.ventana, f'Creador de páginas web')
         self.ventana.mainloop()
-    
+        
+        #variables para el manejo de archivos a nivel global
+        self.lista_tokens = []
+        self.lista_errores = []
+        self.archivo = None
+        self.nombre_archivo = None
+        
     def agregar_menu(self):
         barra_menus = tk.Menu(self.ventana)
         #cascada de menu archivo
@@ -64,15 +69,15 @@ class VentanaPrincipal:
     def guardar_como(self):
         self.nombre_archivo = fd.asksaveasfilename(title = 'Guardar como', filetypes=(('gpw file', '*.gpw'), ('todos los archivos', '*.*')))
         if self.nombre_archivo != '':
-            archivo = open(self.nombre_archivo, 'w', encoding='utf-8')
-            archivo.write(self.scrolledtext1.get('1.0', tk.END))
-            archivo.close()
+            self.archivo = open(self.nombre_archivo, 'w', encoding='utf-8')
+            self.archivo.write(self.scrolledtext1.get('1.0', tk.END))
+            self.archivo.close()
             mb.showinfo('información', 'El archivo se guardó correctamente')
         
     def guardar(self):
-        archivo = open(self.nombre_archivo, 'w', encoding='utf-8')
-        archivo.write(self.scrolledtext1.get('1.0', tk.END))
-        archivo.close()
+        self.archivo = open(self.nombre_archivo, 'w', encoding='utf-8')
+        self.archivo.write(self.scrolledtext1.get('1.0', tk.END))
+        self.archivo.close()
         mb.showinfo('información', 'El archivo se guardó correctamente')
     
     def abrir(self):
@@ -82,10 +87,9 @@ class VentanaPrincipal:
         
         self.nombre_archivo = fd.askopenfilename(title='Seleccione el archivo', filetypes=(('gpw file', '*.gpw'), ('todos los arhivos', '*.*')))
         if self.nombre_archivo != '':
-            archivo = open(self.nombre_archivo, 'r', encoding='utf-8')
-            global contenido
-            contenido = archivo.read()
-            archivo.close()
+            self.archivo = open(self.nombre_archivo, 'r', encoding='utf-8')
+            contenido = self.archivo.read()
+            self.archivo.close()
             self.scrolledtext1.delete('1.0', tk.END)
             self.scrolledtext1.insert('1.0', contenido)
             
@@ -98,20 +102,25 @@ class VentanaPrincipal:
     def generar_pagina_web(self):
         self.lista_tokens = []
         self.lista_errores = []
+        
+        #obteniendo contenido del archivo abierto
+        self.archivo = open(self.nombre_archivo, 'r', encoding='utf-8')
+        contenido = self.archivo.read()
+        self.archivo.close()
+        
         #realizando analisis lexico
         analizador_lexico = AnalizadorLexico(contenido)
         analizador_lexico.analizar()
+        
         #obteniendo lista de tokens del analisis lexico
         self.lista_tokens += analizador_lexico.obtener_lista_tokens()
+        
         #obteniendo lista de errores del analisis lexico
         self.lista_errores += analizador_lexico.obtener_lista_errores()
         
-        if len(self.lista_errores) == 0:
+        """if len(self.lista_errores) == 0:
             print('Iniciando generación de página web')
         else:
-            print('El archivo de entrada contiene errores de tipo léxico o sintáctico.')
-        
-        
-        
-        
+            print('El archivo de entrada contiene errores de tipo léxico o sintáctico.')"""
+     
 ventana = VentanaPrincipal()

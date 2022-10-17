@@ -1,7 +1,5 @@
-from distutils.log import error
 from Token import Token
 from Error import Error
-from prettytable import PrettyTable
 
 class AnalizadorLexico():
     
@@ -14,6 +12,9 @@ class AnalizadorLexico():
         self.buffer = ''
         self.estado = 0
         self.i = 0
+        self.reservadas = ['controles', 'propiedades', 'colocacion', 'colocación']
+        self.controles = ['etiqueta', 'boton', 'check', 'radioboton', 'texto', 'areatexto', 'clave', 'contenedor']
+                
         
     def agregar_token(self, numero, tipo, lexema):
         self.lista_tokens.append(Token(numero, tipo, lexema))
@@ -25,17 +26,53 @@ class AnalizadorLexico():
     #estados del dfa    
     def s0(self, caracter):
         #estado S0
-        if caracter == '<':
+        if caracter.isalpha():
             self.estado = 1
             self.buffer += caracter
             self.columna += 1
-        elif caracter.isalpha():
+        elif caracter == ';':
             self.estado = 2
             self.buffer += caracter
             self.columna += 1
-        elif caracter == ';':
+        elif caracter.isdigit():
             self.estado = 3
-            self.buffer += caracter 
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '.':
+            self.estado = 4
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == ',':
+            self.estado = 5
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '(':
+            self.estado = 6
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == ')':
+            self.estado = 7
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '>':
+            self.estado = 8
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '<':
+            self.estado = 9
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '-':
+            self.estado = 10
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '!':
+            self.estado = 11
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter == '"':
+            self.estado = 12
+            self.buffer += caracter
             self.columna += 1
         elif caracter == '$':
             pass
@@ -44,100 +81,87 @@ class AnalizadorLexico():
             self.columna += 1
             
     def s1(self, caracter):
-        if caracter == '!':
-            self.estado = 4
+        if caracter.isalpha():
+            self.estado = 1
+            self.buffer += caracter
+            self.columna += 1
+        elif caracter.isdigit():
+            self.estado = 13
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, '!', caracter)
-            self.estado = 4
-            self.columna += 1
-            self.i -= 1
             
-    def s2(self, caracter):
-        if caracter.isalpha() or caracter.isdigit():
-            self.estado = 2
-            self.buffer += caracter
-            self.columna += 1
-        elif caracter == '-':
-            self.estado = 5
-            self.buffer += caracter
-            self.columna += 1
-        else:
-            self.agregar_token(2, 'Componente/ID', self.buffer)
+            self.agregar_token(1, 'Reservada/Propiedad', self.buffer)
             self.estado = 0
             self.i -= 1
             
-    def s3(self, caracter):
-        self.agregar_token(3, 'Punto y coma', self.buffer)
+    def s2(self, caracter):
+        self.agregar_token(2, 'Punto y coma', self.buffer)
         self.estado = 0
+        self.i -= 1
+            
+    def s3(self, caracter):
+        if caracter.isdigit():
+            self.estado = 3
+            self.buffer += caracter
+            self.columna += 1
+        else:
+            self.agregar_token(3, 'Valor', self.buffer)
+            self.estado = 0
+            self.i -= 1
             
     def s4(self, caracter):
-        if caracter == '-':
-            self.estado = 6
-            self.buffer += caracter
-            self.columna += 1
-        else:
-            self.agregar_error('Léxico', self.linea, self.columna, '-', caracter)
-            self.estado = 6
-            self.columna += 1
-            self.i -= 1
-            
-    def s5(self, caracter):
-        if caracter == '-':
-            self.estado = 7
-            self.buffer += caracter
-            self.columna += 1
-        else:
-            self.agregar_error('Léxico', self.linea, self.columna, '-',caracter)
-            self.estado = 7
-            self.columna += 1
-            self.i -= 1
-            
-    def s6(self, caracter):
-        if caracter == '-':
-            self.estado = 8
-            self.buffer += caracter
-            self.columna += 1
-        else:
-            self.agregar_error('Léxico', self.linea, self.columna, '-', caracter)
-            self.estado = 8
-            self.columna += 1
-            self.i -= 1
-             
-    def s7(self, caracter):
-        if caracter == '>':
-            self.estado = 9
-            self.buffer += caracter
-            self.columna += 1
-        else:
-            self.agregar_error('Léxico', self.linea, self.columna, '>', caracter)
-            self.estado = 9
-            self.columna += 1
-            self.i -= 1
-            
-    def s8(self, caracter):
-        if caracter.isalpha():
-            self.estado = 10
-            self.buffer += caracter
-            self.columna += 1
-        else:
-            self.agregar_error('Léxico', self.linea, self.columna, 'Letra', caracter)
-            self.estado = 10
-            self.columna += 1
-            self.i -= 1
-            
-    def s9(self, caracter):
-        self.agregar_token(4, 'Cierre', self.buffer)
+        self.agregar_token(4, 'Punto', self.buffer)
         self.estado = 0
-            
+        self.i -= 1
+        
+    def s5(self, caracter):
+        self.agregar_token(5, 'Coma', self.buffer)
+        self.estado = 0
+        self.i -= 1
+    
+    def s6(self, caracter):
+        self.agregar_token(6, 'Paréntesis izquierdo', self.buffer)
+        self.estado = 0
+        self.i -= 1
+        
+    def s7(self, caracter):
+        self.agregar_token(7, 'Paréntesis derecho', self.buffer)
+        self.estado = 0
+        self.i -= 1
+        
+    def s8(self, caracter):
+        self.agregar_token(8, 'Mayor que', self.buffer)
+        self.estado = 0
+        self.i -= 1
+        
+    def s9(self, caracter):
+        self.agregar_token(9, 'Menor que', self.buffer)
+        self.estado = 0
+        self.i -= 1
+        
     def s10(self, caracter):
-        if caracter.isalpha():
-            self.estado = 10
+        self.agregar_token(10, 'Guion', self.buffer)
+        self.estado = 0
+        self.i -= 1
+        
+    def s11(self, caracter):
+        self.agregar_token(11, 'Admiración', self.buffer)
+        self.estado = 0
+        self.i -= 1
+        
+    def s12(self, caracter):
+        self.agregar_token(12, 'Comillas', self.buffer)
+        self.estado = 0
+        self.i -= 1
+            
+    def s13(self, caracter):
+        if caracter.isalpha() or caracter.isdigit():
+            self.estado = 13
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_token(1, 'Apertura', self.buffer)
+            self.agregar_token(13, 'Control/Identificador', self.buffer)
             self.estado = 0
             self.i -= 1
      
@@ -183,9 +207,16 @@ class AnalizadorLexico():
                         self.s9(cadena[self.i])
                     elif self.estado == 10:
                         self.s10(cadena[self.i])
+                    elif self.estado == 11:
+                        self.s11(cadena[self.i])
+                    elif self.estado == 12:
+                        self.s12(cadena[self.i])
+                    elif self.estado == 13:
+                        self.s13(cadena[self.i])
                     self.i += 1
-            self.linea += 1        
-            
+            self.linea += 1     
+     
+    #retornando lista de tokens y errores       
     def obtener_lista_tokens(self):
         return self.lista_tokens
         

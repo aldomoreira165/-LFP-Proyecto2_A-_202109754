@@ -22,7 +22,7 @@ class AnalizadorLexico():
         self.buffer = ''
         
     def agregar_error(self, tipo, linea, columna, tokenEsperado, caracter):
-        self.lista_errores.append(Error(tipo, linea, columna, tokenEsperado, f'Caracter {caracter}', ))
+        self.lista_errores.append(Error(tipo, linea, columna, tokenEsperado, f'Caracter {caracter} no pertenece al lenguaje.'))
      
     #estados del dfa    
     def s0(self, caracter):
@@ -78,7 +78,7 @@ class AnalizadorLexico():
         elif caracter == '$':
             pass
         else:
-            self.agregar_error('Léxico', self.linea, self.columna, '<, Letra, ;', caracter)
+            self.agregar_error('Léxico', self.linea, self.columna, 'L|D|.|,|;|(|)|<|>|"|!', caracter)
             self.columna += 1
             
     def s1(self, caracter):

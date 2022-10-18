@@ -16,7 +16,7 @@ class VentanaErrores:
         tabla.heading('#0', text = 'Tipo')
         tabla.heading('#1', text = 'Línea')
         tabla.heading('#2', text = 'Columna')
-        tabla.heading('#3', text = 'Componente lexico esperado')
+        tabla.heading('#3', text = 'Componente esperado')
         tabla.heading('#4', text = 'Descripción')
         
         #llenando la tabla

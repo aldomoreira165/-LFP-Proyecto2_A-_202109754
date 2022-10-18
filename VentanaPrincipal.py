@@ -5,6 +5,7 @@ from tkinter.font import BOLD
 from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 from AnalizadorLexico import AnalizadorLexico
+from AnalizadorSintactico import AnalizadorSintactico
 from VentanaTokens import VentanaTokens
 from VentanaErrores import VentanaErrores
 
@@ -100,8 +101,8 @@ class VentanaPrincipal:
         ventana_errores = VentanaErrores(self.lista_errores)
                  
     def generar_pagina_web(self):
-        self.lista_tokens = []
-        self.lista_errores = []
+        self.lista_tokens.clear()
+        self.lista_errores.clear()
         
         #obteniendo contenido del archivo abierto
         self.archivo = open(self.nombre_archivo, 'r', encoding='utf-8')
@@ -115,12 +116,16 @@ class VentanaPrincipal:
         #obteniendo lista de tokens del analisis lexico
         self.lista_tokens += analizador_lexico.obtener_lista_tokens()
         
-        #obteniendo lista de errores del analisis lexico
+        #obteniendo lista de errores del analisis léxico
         self.lista_errores += analizador_lexico.obtener_lista_errores()
-        
-        """if len(self.lista_errores) == 0:
-            print('Iniciando generación de página web')
-        else:
-            print('El archivo de entrada contiene errores de tipo léxico o sintáctico.')"""
+
+        tokens = []
+        for i in range (len(self.lista_tokens)):
+            tokens.append(self.lista_tokens[i])
+    
+        #creando analizador sintáctico y enviandole la lista de tokens
+        analizador_sintactico = AnalizadorSintactico(tokens)
+        analizador_sintactico.analizar()
+        self.lista_errores += analizador_sintactico.obtener_lista_errores()
      
 ventana = VentanaPrincipal()

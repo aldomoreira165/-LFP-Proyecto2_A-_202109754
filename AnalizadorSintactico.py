@@ -33,9 +33,11 @@ class AnalizadorSintactico:
         #observar el primer elemento para decidir a donde ir 
         temporal = self.observar_token()
         if temporal is None:
-            self.agregar_error('Sintáctico', 0, 0, 'Palabra reservada de apertura', 'Archivo vacío')
-        else:
+            self.agregar_error('Sintáctico', 0, 0, 'Apertura', 'Fin de archivo')
+        elif temporal.numero == 11:
             self.ABRIR_AREA()
+        else:
+            self.agregar_error('Sintáctico', 0, 0, 'Apertura', temporal.caracter)
             
     def ABRIR_AREA(self):
         #verifica que se abra un area (controles, propiedades, colocacion)
@@ -61,6 +63,9 @@ class AnalizadorSintactico:
                             self.agregar_error('Sintáctico', 0, 0, 'Reservada', 'Final de archivo')
                             return
                         elif token.numero == 1:
+                            #variable global para indicar al analizador dentro de que etiqueta está
+                            global etiqueta
+                            etiqueta = token.lexema
                             self.INSTRUCCION()
                         else:
                             self.agregar_error('Sintáctico', 0, 0, 'Reservada', token.lexema)
@@ -76,13 +81,18 @@ class AnalizadorSintactico:
     def INSTRUCCION(self):
         temporal = self.observar_token()
         if temporal is None:
-            self.agregar_error('Sintáctico', 0, 0, 'Control', 'Archivo vacío')
+            self.agregar_error('Sintáctico', 0, 0, 'Cierre | Instrucción', 'Fin de archivo')
         elif temporal.numero == 3:
             self.INSTRUCCION_CONTROLES()
+        elif temporal.numero == 14 and etiqueta == 'propiedades':
+            self.INSTRUCCION_PROPIEDADES()
+        elif temporal.numero == 14 and etiqueta == 'colocacion':
+            print('Estás dentro de la etiqueta colocacion')
+            #self.INSTRUCCION_COLOCACION() 
         elif temporal.numero == 1:
             self.CERRAR_AREA()
         else:
-            self.agregar_error('Sintáctico', 0, 0, 'Palabra reservada de cierre | Instrucción', temporal.lexema)
+            self.agregar_error('Sintáctico', 0, 0, 'Cierre | Instrucción', temporal.lexema)
           
     def INSTRUCCION_CONTROLES(self):
         token = self.sacar_token()
@@ -102,6 +112,12 @@ class AnalizadorSintactico:
                 self.agregar_error('Sintáctico', 0, 0, 'ID', token.lexema)
         else:
             self.agregar_error('Sintáctico', 0, 0, 'Control', token.lexema)
+            
+    def INSTRUCCION_PROPIEDADES(self):
+        pass
+            
+    def INSTRUCCION_COLOCACION(self):
+        pass
     
     def CERRAR_AREA(self):
         token = self.sacar_token()
@@ -118,7 +134,11 @@ class AnalizadorSintactico:
                     if token is None:
                         self.agregar_error('Sintáctico', 0, 0, '>', 'Final de archivo')
                     elif token.numero == 10:
-                        print('Estructura correcta sintacticamente')
+                        token = self.observar_token()
+                        if token is None:
+                            print('Archivo correcto')
+                        else:
+                            self.INICIO()
                     else: 
                        self.agregar_error('Sintáctico', 0, 0, '>', token.lexema) 
                 else:
@@ -127,7 +147,6 @@ class AnalizadorSintactico:
                 self.agregar_error('Sintáctico', 0, 0, '-', token.lexema)
         else:
             self.agregar_error('Sintáctico', 0, 0, 'Reservada', token.lexema)
-        
-            
+                 
     def obtener_lista_errores(self):
         return self.lista_errores

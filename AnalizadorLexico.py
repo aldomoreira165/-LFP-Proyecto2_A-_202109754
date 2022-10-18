@@ -12,7 +12,7 @@ class AnalizadorLexico():
         self.buffer = ''
         self.estado = 0
         self.i = 0
-        self.reservadas = ['controles', 'propiedades', 'colocacion', 'colocación']
+        self.reservadas = ['controles', 'propiedades', 'colocacion']
         self.controles = ['etiqueta', 'boton', 'check', 'radioboton', 'texto', 'areatexto', 'clave', 'contenedor']
         self.propiedades = ['id', 'setcolorletra', 'settexto', 'setalineacion', 'setcolorfondo', 'setmarcada', 'setgrupo', 'setancho', 'setalto']
         self.colocaciones = ['setposicion', 'add']         

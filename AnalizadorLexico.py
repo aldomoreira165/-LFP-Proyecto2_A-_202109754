@@ -100,12 +100,12 @@ class AnalizadorLexico():
             elif self.buffer.lower() in self.colocaciones:
                 self.agregar_token(4, 'Posicion', self.buffer)
             else:
-                self.agregar_token(14, 'Identificador', self.buffer)
+                self.agregar_token(5, 'Identificador', self.buffer)
             self.estado = 0
             self.i -= 1
             
     def s2(self, caracter):
-        self.agregar_token(4, 'Punto y coma', self.buffer)
+        self.agregar_token(6, 'Punto y coma', self.buffer)
         self.estado = 0
         self.i -= 1
             
@@ -115,52 +115,52 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_token(5, 'Valor', self.buffer)
+            self.agregar_token(7, 'Valor', self.buffer)
             self.estado = 0
             self.i -= 1
             
     def s4(self, caracter):
-        self.agregar_token(6, 'Punto', self.buffer)
+        self.agregar_token(8, 'Punto', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s5(self, caracter):
-        self.agregar_token(7, 'Coma', self.buffer)
+        self.agregar_token(9, 'Coma', self.buffer)
         self.estado = 0
         self.i -= 1
     
     def s6(self, caracter):
-        self.agregar_token(8, 'Paréntesis izquierdo', self.buffer)
+        self.agregar_token(10, 'Paréntesis izquierdo', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s7(self, caracter):
-        self.agregar_token(9, 'Paréntesis derecho', self.buffer)
+        self.agregar_token(11, 'Paréntesis derecho', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s8(self, caracter):
-        self.agregar_token(10, 'Mayor que', self.buffer)
+        self.agregar_token(12, 'Mayor que', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s9(self, caracter):
-        self.agregar_token(11, 'Menor que', self.buffer)
+        self.agregar_token(13, 'Menor que', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s10(self, caracter):
-        self.agregar_token(12, 'Guion', self.buffer)
+        self.agregar_token(14, 'Guion', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s11(self, caracter):
-        self.agregar_token(13, 'Admiración', self.buffer)
+        self.agregar_token(15, 'Admiración', self.buffer)
         self.estado = 0
         self.i -= 1
         
     def s12(self, caracter):
-        self.agregar_token(14, 'Comillas', self.buffer)
+        self.agregar_token(16, 'Comillas', self.buffer)
         self.estado = 0
         self.i -= 1
             
@@ -170,7 +170,7 @@ class AnalizadorLexico():
             self.buffer += caracter
             self.columna += 1
         else:
-            self.agregar_token(14, 'Identificador', self.buffer)
+            self.agregar_token(5, 'Identificador', self.buffer)
             self.estado = 0
             self.i -= 1
      

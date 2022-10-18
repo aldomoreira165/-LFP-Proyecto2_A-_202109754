@@ -5,6 +5,8 @@ class AnalizadorSintactico:
     def __init__ (self, tokens):
         self.tokens = tokens
         self.lista_errores = []
+        self.linea = 1
+        self.columna = 0
            
     def agregar_error(self, tipo, linea, columna, tokenEsperado, descripcion):
         self.lista_errores.append(Error(tipo, linea, columna, tokenEsperado, descripcion))
@@ -34,7 +36,7 @@ class AnalizadorSintactico:
         temporal = self.observar_token()
         if temporal is None:
             self.agregar_error('Sintáctico', 0, 0, 'Apertura', 'Fin de archivo')
-        elif temporal.numero == 11:
+        elif temporal.numero == 13:
             self.ABRIR_AREA()
         else:
             self.agregar_error('Sintáctico', 0, 0, 'Apertura', temporal.caracter)
@@ -42,22 +44,22 @@ class AnalizadorSintactico:
     def ABRIR_AREA(self):
         #verifica que se abra un area (controles, propiedades, colocacion)
         token = self.sacar_token()
-        if token.numero == 11:
+        if token.numero == 13:
             token = self.sacar_token()
             if token is None:
                 self.agregar_error('Sintáctico', 0, 0, '!', 'Final de archivo')
                 return
-            elif token.numero == 13:
+            elif token.numero == 15:
                 token = self.sacar_token()
                 if token is None:
                     self.agregar_error('Sintáctico', 0, 0, '-', 'Final de archivo')
                     return
-                elif token.numero == 12:
+                elif token.numero == 14:
                     token = self.sacar_token()
                     if token is None:
                         self.agregar_error('Sintáctico', 0, 0, '-', 'Final de archivo')
                         return
-                    elif token.numero == 12:
+                    elif token.numero == 14:
                         token = self.sacar_token()
                         if token is None:
                             self.agregar_error('Sintáctico', 0, 0, 'Reservada', 'Final de archivo')
@@ -84,9 +86,9 @@ class AnalizadorSintactico:
             self.agregar_error('Sintáctico', 0, 0, 'Cierre | Instrucción', 'Fin de archivo')
         elif temporal.numero == 3:
             self.INSTRUCCION_CONTROLES()
-        elif temporal.numero == 14 and etiqueta == 'propiedades':
+        elif temporal.numero == 5 and etiqueta == 'propiedades':
             self.INSTRUCCION_PROPIEDADES()
-        elif temporal.numero == 14 and etiqueta == 'colocacion':
+        elif temporal.numero == 5 and etiqueta == 'colocacion':
             print('Estás dentro de la etiqueta colocacion')
             #self.INSTRUCCION_COLOCACION() 
         elif temporal.numero == 1:
@@ -99,12 +101,12 @@ class AnalizadorSintactico:
         if token.numero == 3:
             token = self.sacar_token()
             if token is None:
-                self.agregar_error('Sintáctico', 0, 0, ID, 'Final de archivo')
-            elif token.numero == 14:
+                self.agregar_error('Sintáctico', 0, 0, 'ID', 'Final de archivo')
+            elif token.numero == 5:
                 token = self.sacar_token()
                 if token is None:
                     self.agregar_error('Sintáctico', 0, 0, ';', 'Final de archivo')
-                elif token.numero == 4:
+                elif token.numero == 6:
                     self.INSTRUCCION()
                 else:
                     self.agregar_error('Sintáctico', 0, 0, ';', token.lexema)
@@ -114,7 +116,29 @@ class AnalizadorSintactico:
             self.agregar_error('Sintáctico', 0, 0, 'Control', token.lexema)
             
     def INSTRUCCION_PROPIEDADES(self):
-        pass
+        token = self.sacar_token()
+        if token.numero == 5:
+            token = self.sacar_token()
+            if token is None:
+                self.agregar_error('Sintáctico', 0, 0, '.', 'Final de archivo')
+            elif token.numero == 8:
+                token = self.sacar_token()
+                if token is None:
+                    self.agregar_error('Sintáctico', 0, 0, 'Propiedad', 'Final de archivo')
+                elif token.numero == 2:
+                    token = self.sacar_token()
+                    if token is None:
+                        self.agregar_error('Sintáctico', 0, 0, '(', 'Final de archivo')
+                    elif token.numero == 10:
+                       self.PARENTESIS()                        
+                    else:
+                        self.agregar_error('Sintáctico', 0, 0, '(', token.lexema)
+                else:
+                    self.agregar_error('Sintáctico', 0, 0, 'Propiedad', token.lexema)
+            else:
+                self.agregar_error('Sintáctico', 0, 0, '.', token.lexema)
+        else:
+            self.agregar_error('Sintáctico', 0, 0, 'Identificador', token.lexema)
             
     def INSTRUCCION_COLOCACION(self):
         pass
@@ -125,15 +149,15 @@ class AnalizadorSintactico:
             token = self.sacar_token()
             if token is None:
                 self.agregar_error('Sintáctico', 0, 0, '-', 'Final de archivo')
-            elif token.numero == 12:
+            elif token.numero == 14:
                 token = self.sacar_token()
                 if token is None:
                     self.agregar_error('Sintáctico', 0, 0, '-', 'Final de archivo')
-                elif token.numero == 12:
+                elif token.numero == 14:
                     token = self.sacar_token()
                     if token is None:
                         self.agregar_error('Sintáctico', 0, 0, '>', 'Final de archivo')
-                    elif token.numero == 10:
+                    elif token.numero == 12:
                         token = self.observar_token()
                         if token is None:
                             print('Archivo correcto')
@@ -147,6 +171,30 @@ class AnalizadorSintactico:
                 self.agregar_error('Sintáctico', 0, 0, '-', token.lexema)
         else:
             self.agregar_error('Sintáctico', 0, 0, 'Reservada', token.lexema)
+            
+    def PARENTESIS(self):
+        temporal = self.observar_token()
+        if temporal is None:
+            self.agregar_error('Sintáctico', 0, 0, 'Valor de propiedad', 'Final de archivo')
+        elif temporal.numero == 7 or temporal.numero == 16 or temporal.numero == 5 or token.numero == 9:
+            self.CONTENIDO_PARENTESIS()
+        else:
+            self.agregar_error('Sintáctico', 0, 0, 'Valor de propiedad', temporal.lexema)
+              
+    def CONTENIDO_PARENTESIS(self):
+        token = self.sacar_token()
+        if token.numero == 7 or token.numero == 16 or token.numero == 5 or token.numero == 9:
+            self.CONTENIDO_PARENTESIS()
+        elif token.numero == 11:
+            token = self.sacar_token()
+            if token is None:
+                self.agregar_error('Sintáctico', 0, 0, ';', 'Final de archivo')
+            elif token.numero == 6:
+                self.INSTRUCCION()
+            else:
+                self.agregar_error('Sintáctico', 0, 0, ';', token.lexema)
+        else:
+            self.agregar_error('Sintáctico', 0, 0, 'Valor de propiedad', token.lexema) 
                  
     def obtener_lista_errores(self):
         return self.lista_errores

@@ -231,6 +231,3 @@ class AnalizadorLexico():
         
     def obtener_lista_errores(self):
         return self.lista_errores
-        
-        
-        

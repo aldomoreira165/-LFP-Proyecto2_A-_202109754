@@ -102,7 +102,7 @@ class AnalizadorSintactico:
         elif temporal.numero == 5 and etiqueta == 'colocacion':
             self.columna = 0
             self.linea += 1
-            self.INSTRUCCION_COLOCACION() 
+            self.INSTRUCCION_COLOCACION()
         elif temporal.numero == 1:
             self.columna = 0
             self.linea += 1
@@ -162,7 +162,33 @@ class AnalizadorSintactico:
             self.agregar_error('Sintáctico', self.linea, self.columna, 'Identificador', token.lexema)
             
     def INSTRUCCION_COLOCACION(self):
-        pass
+        token = self.sacar_token()
+        self.columna += len(token.lexema)
+        if token.numero == 5:
+            token = self.sacar_token()
+            self.columna += len(token.lexema)
+            if token is None:
+                self.agregar_error('Sintáctico', self.linea, self.columna, '.', 'Final de archivo')
+            elif token.numero == 8:
+                token = self.sacar_token()
+                self.columna += len(token.lexema)
+                if token is None:
+                    self.agregar_error('Sintáctico', self.linea, self.columna, 'Propiedad', 'Final de archivo')
+                elif token.numero == 4:
+                    token = self.sacar_token()
+                    self.columna += len(token.lexema)
+                    if token is None:
+                        self.agregar_error('Sintáctico', self.linea, self.columna, '(', 'Final de archivo')
+                    elif token.numero == 10:
+                       self.PARENTESIS()                        
+                    else:
+                        self.agregar_error('Sintáctico', self.linea, self.columna, '(', token.lexema)
+                else:
+                    self.agregar_error('Sintáctico', self.linea, self.columna, 'Posicion', token.lexema)
+            else:
+                self.agregar_error('Sintáctico', self.linea, self.columna, '.', token.lexema)
+        else:
+            self.agregar_error('Sintáctico', self.linea, self.columna, 'Identificador', token.lexema)
     
     def CERRAR_AREA(self):
         token = self.sacar_token()
@@ -185,7 +211,7 @@ class AnalizadorSintactico:
                     elif token.numero == 12:
                         token = self.observar_token()
                         if token is None:
-                            print('Archivo correcto')
+                            pass
                         else:
                             self.INICIO()
                     else: 

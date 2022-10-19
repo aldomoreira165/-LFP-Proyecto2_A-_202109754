@@ -127,5 +127,10 @@ class VentanaPrincipal:
         analizador_sintactico = AnalizadorSintactico(tokens)
         analizador_sintactico.analizar()
         self.lista_errores += analizador_sintactico.obtener_lista_errores()
-     
+        
+        
+        if len(self.lista_errores) == 0:
+            tk.messagebox.showinfo(message="Archivo compilado correctamente.", title="Éxito")
+        else:
+            tk.messagebox.showerror(message="El archivo contiene errores.", title="Error")
 ventana = VentanaPrincipal()

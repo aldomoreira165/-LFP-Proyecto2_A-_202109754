@@ -8,7 +8,7 @@ class LenguajeObjeto:
         with open('Salida/index.html', 'w') as archivo:
             archivo.write('<html>\n')
             archivo.write('<head>\n')
-            archivo.write('<link href="Salida/prueba.css" rel="stylesheet"')
+            archivo.write('<link href="prueba.css" rel="stylesheet" type="text/css"/>\n')
             archivo.write('</head>\n')
             archivo.write('<body>\n')
             
@@ -17,7 +17,7 @@ class LenguajeObjeto:
                 archivo.write('     </div>\n')
                 
             for etiqueta in etiquetas:
-                archivo.write(f'    <label id={etiqueta.identificador}>{etiqueta.texto}</label>\n')
+                archivo.write(f'    <label id="{etiqueta.identificador}">{etiqueta.texto}</label>\n')
                 
             for boton in botones:
                 archivo.write(f'    <input type="submit" id="{boton.identificador}" value="{boton.texto}" style="text-align:{boton.alineacion}"/>\n')
@@ -34,8 +34,12 @@ class LenguajeObjeto:
             archivo.write('</body>\n')
             archivo.write('</html\n')
             
-    """def generarCSS(self):
-        with open('Salida/prueba.css', 'w') as archivo:"""
-             
+    def generarCSS(self, contenedores, etiquetas, botones, textos, areasTexto, claves):
+        with open('Salida/prueba.css', 'w') as archivo:
+            
+            for etiqueta in etiquetas:
+                archivo.write(f'#{etiqueta.identificador}' + '{\n')
+                archivo.write(f'color:rgb({etiqueta.colorLetra});\n')
+                archivo.write('}\n')
             
     

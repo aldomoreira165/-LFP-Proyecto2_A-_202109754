@@ -168,7 +168,19 @@ class VentanaPrincipal:
                             else:
                                 pass
                         else:
-                            pass    
+                            pass
+                        
+                    #buscando color de letra de etiqueta
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nueva_etiqueta.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nueva_etiqueta.setColorLetra(color)
+                            else:
+                                pass
+                        else:
+                            pass
                     
                     lista_etiquetas.append(nueva_etiqueta)
                     
@@ -273,6 +285,7 @@ class VentanaPrincipal:
                     lista_claves.append(nueva_clave)
                         
             lenguaje_objeto = LenguajeObjeto()
+            lenguaje_objeto.generarCSS(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)
             lenguaje_objeto.generarHTML(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)
         else:
             tk.messagebox.showerror(message="El archivo contiene errores.", title="Error")

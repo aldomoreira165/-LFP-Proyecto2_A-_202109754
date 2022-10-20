@@ -8,6 +8,14 @@ from AnalizadorLexico import AnalizadorLexico
 from AnalizadorSintactico import AnalizadorSintactico
 from VentanaTokens import VentanaTokens
 from VentanaErrores import VentanaErrores
+from LenguajeObjeto import LenguajeObjeto
+from Contenedor import Contenedor
+from Etiqueta import Etiqueta
+from Check import Check
+from Boton import Boton
+from Texto import Texto
+from AreaTexto import AreaTexto
+from Clave import Clave
 
 class VentanaPrincipal:
     
@@ -64,8 +72,7 @@ class VentanaPrincipal:
             self.guardar_como()
         else:
             pass
-        self.scrolledtext1.delete('1.0', tk.END)
-        
+        self.scrolledtext1.delete('1.0', tk.END)   
         
     def guardar_como(self):
         self.nombre_archivo = fd.asksaveasfilename(title = 'Guardar como', filetypes=(('gpw file', '*.gpw'), ('todos los archivos', '*.*')))
@@ -128,9 +135,146 @@ class VentanaPrincipal:
         analizador_sintactico.analizar()
         self.lista_errores += analizador_sintactico.obtener_lista_errores()
         
-        
         if len(self.lista_errores) == 0:
             tk.messagebox.showinfo(message="Archivo compilado correctamente.", title="Éxito")
+            
+            #creando archivos de salida
+            lista_etiquetas = []
+            lista_botones = []
+            lista_checks = []
+            lista_radioBotones = []
+            lista_textos = []
+            lista_areasTexto = []
+            lista_claves = []
+            lista_contenedores = []
+            for i in range(len(self.lista_tokens)):
+                token = self.lista_tokens[i]
+                
+                #contenedores
+                if token.numero == 3 and (token.lexema == 'Contenedor' or token.lexema == 'contenedor'):
+                    nuevo_contenedor = Contenedor(self.lista_tokens[i+1].lexema, None, None, None)
+                    lista_contenedores.append(nuevo_contenedor)
+                    
+                #etiquetas
+                elif token.numero == 3 and (token.lexema == 'Etiqueta' or token.lexema == 'etiqueta'):
+                    nueva_etiqueta = Etiqueta(self.lista_tokens[i+1].lexema, None, None, None)
+                    
+                    #buscando texto de etiqueta
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nueva_etiqueta.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nueva_etiqueta.setTexto(self.lista_tokens[j+5].lexema)
+                            else:
+                                pass
+                        else:
+                            pass    
+                    
+                    lista_etiquetas.append(nueva_etiqueta)
+                    
+                #botones
+                elif token.numero == 3 and (token.lexema == 'Boton' or token.lexema == 'boton'):
+                    nuevo_boton = Boton(self.lista_tokens[i+1].lexema, None, None)
+                    
+                    #buscando texto de boton
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_boton.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nuevo_boton.setTexto(self.lista_tokens[j+5].lexema)
+                            else:
+                                pass
+                        else:
+                            pass 
+                        
+                    #buscando alineacion de boton
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_boton.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nuevo_boton.setAlineacion(self.lista_tokens[j+4].lexema)
+                            else:
+                                pass
+                        else:
+                            pass
+                        
+                    lista_botones.append(nuevo_boton)
+                    
+                #texto 
+                elif token.numero == 3 and (token.lexema == 'Texto' or token.lexema == 'texto'):
+                    nuevo_texto = Texto(self.lista_tokens[i+1].lexema, None, None)
+                    
+                    #buscando texto de texto
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_texto.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nuevo_texto.setTexto(self.lista_tokens[j+5].lexema)
+                            else:
+                                pass
+                        else:
+                            pass 
+                        
+                    #buscando alineacion de texto
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_texto.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nuevo_texto.setAlineacion(self.lista_tokens[j+4].lexema)
+                            else:
+                                pass
+                        else:
+                            pass
+                    
+                    lista_textos.append(nuevo_texto)
+                    
+                elif token.numero == 3 and (token.lexema == 'AreaTexto' or token.lexema == 'areatexto'):
+                    nueva_areatexto = AreaTexto(self.lista_tokens[i+1].lexema, None)
+                    
+                    #buscando texto de texto
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nueva_areatexto.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nueva_areatexto.setTexto(self.lista_tokens[j+5].lexema)
+                            else:
+                                pass
+                        else:
+                            pass
+                        
+                    lista_areasTexto.append(nueva_areatexto)
+                    
+                #claves
+                elif token.numero == 3 and (token.lexema == 'Clave' or token.lexema == 'clave'):
+                    nueva_clave = Clave(self.lista_tokens[i+1].lexema, None, None)
+                    
+                    #buscando texto de clave
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nueva_clave.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nueva_clave.setTexto(self.lista_tokens[j+5].lexema)
+                            else:
+                                pass
+                        else:
+                            pass 
+                        
+                    #buscando alineacion de clave
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nueva_clave.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nueva_clave.setAlineacion(self.lista_tokens[j+4].lexema)
+                            else:
+                                pass
+                        else:
+                            pass
+                        
+                    lista_claves.append(nueva_clave)
+                        
+            lenguaje_objeto = LenguajeObjeto()
+            lenguaje_objeto.generarHTML(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)
         else:
             tk.messagebox.showerror(message="El archivo contiene errores.", title="Error")
+            
 ventana = VentanaPrincipal()

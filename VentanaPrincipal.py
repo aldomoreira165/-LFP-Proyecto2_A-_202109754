@@ -152,12 +152,31 @@ class VentanaPrincipal:
                 
                 #contenedores
                 if token.numero == 3 and (token.lexema == 'Contenedor' or token.lexema == 'contenedor'):
-                    nuevo_contenedor = Contenedor(self.lista_tokens[i+1].lexema, None, None, None)
+                    nuevo_contenedor = Contenedor(self.lista_tokens[i+1].lexema, None, None, None, None, None)
+                    
+                    #buscando texto de etiqueta
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_contenedor.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_contenedor.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nuevo_contenedor.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nuevo_contenedor.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nuevo_contenedor.setAncho(self.lista_tokens[j+4].lexema)
+                            else:
+                                pass
+                        else:
+                            pass
+                        
                     lista_contenedores.append(nuevo_contenedor)
                     
                 #etiquetas
                 elif token.numero == 3 and (token.lexema == 'Etiqueta' or token.lexema == 'etiqueta'):
-                    nueva_etiqueta = Etiqueta(self.lista_tokens[i+1].lexema, None, None, None)
+                    nueva_etiqueta = Etiqueta(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None)
                     
                     #buscando texto de etiqueta
                     for j in range(len(self.lista_tokens)):
@@ -165,28 +184,28 @@ class VentanaPrincipal:
                         if token.lexema == nueva_etiqueta.identificador:
                             if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
                                 nueva_etiqueta.setTexto(self.lista_tokens[j+5].lexema)
-                            else:
-                                pass
-                        else:
-                            pass
-                        
-                    #buscando color de letra de etiqueta
-                    for j in range(len(self.lista_tokens)):
-                        token = self.lista_tokens[j]
-                        if token.lexema == nueva_etiqueta.identificador:
-                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
                                 color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
                                 nueva_etiqueta.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nueva_etiqueta.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nueva_etiqueta.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nueva_etiqueta.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nueva_etiqueta.setAncho(self.lista_tokens[j+4].lexema)
                             else:
                                 pass
                         else:
-                            pass
+                            pass                   
                     
                     lista_etiquetas.append(nueva_etiqueta)
                     
                 #botones
                 elif token.numero == 3 and (token.lexema == 'Boton' or token.lexema == 'boton'):
-                    nuevo_boton = Boton(self.lista_tokens[i+1].lexema, None, None)
+                    nuevo_boton = Boton(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None)
                     
                     #buscando texto de boton
                     for j in range(len(self.lista_tokens)):
@@ -194,27 +213,30 @@ class VentanaPrincipal:
                         if token.lexema == nuevo_boton.identificador:
                             if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
                                 nuevo_boton.setTexto(self.lista_tokens[j+5].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nuevo_boton.setAlineacion(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_boton.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_boton.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nuevo_boton.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nuevo_boton.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nuevo_boton.setAncho(self.lista_tokens[j+4].lexema)
                             else:
                                 pass
                         else:
                             pass 
                         
-                    #buscando alineacion de boton
-                    for j in range(len(self.lista_tokens)):
-                        token = self.lista_tokens[j]
-                        if token.lexema == nuevo_boton.identificador:
-                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
-                                nuevo_boton.setAlineacion(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass
-                        
                     lista_botones.append(nuevo_boton)
                     
                 #texto 
                 elif token.numero == 3 and (token.lexema == 'Texto' or token.lexema == 'texto'):
-                    nuevo_texto = Texto(self.lista_tokens[i+1].lexema, None, None)
+                    nuevo_texto = Texto(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None)
                     
                     #buscando texto de texto
                     for j in range(len(self.lista_tokens)):
@@ -222,26 +244,29 @@ class VentanaPrincipal:
                         if token.lexema == nuevo_texto.identificador:
                             if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
                                 nuevo_texto.setTexto(self.lista_tokens[j+5].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nuevo_texto.setAlineacion(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_texto.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_texto.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nuevo_texto.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nuevo_texto.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nuevo_texto.setAncho(self.lista_tokens[j+4].lexema)
                             else:
                                 pass
                         else:
                             pass 
-                        
-                    #buscando alineacion de texto
-                    for j in range(len(self.lista_tokens)):
-                        token = self.lista_tokens[j]
-                        if token.lexema == nuevo_texto.identificador:
-                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
-                                nuevo_texto.setAlineacion(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass
                     
                     lista_textos.append(nuevo_texto)
                     
                 elif token.numero == 3 and (token.lexema == 'AreaTexto' or token.lexema == 'areatexto'):
-                    nueva_areatexto = AreaTexto(self.lista_tokens[i+1].lexema, None)
+                    nueva_areatexto = AreaTexto(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None)
                     
                     #buscando texto de texto
                     for j in range(len(self.lista_tokens)):
@@ -249,6 +274,20 @@ class VentanaPrincipal:
                         if token.lexema == nueva_areatexto.identificador:
                             if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
                                 nueva_areatexto.setTexto(self.lista_tokens[j+5].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nueva_areatexto.setAlineacion(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nueva_areatexto.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nueva_areatexto.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nueva_areatexto.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nueva_areatexto.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nueva_areatexto.setAncho(self.lista_tokens[j+4].lexema)
                             else:
                                 pass
                         else:
@@ -258,7 +297,7 @@ class VentanaPrincipal:
                     
                 #claves
                 elif token.numero == 3 and (token.lexema == 'Clave' or token.lexema == 'clave'):
-                    nueva_clave = Clave(self.lista_tokens[i+1].lexema, None, None)
+                    nueva_clave = Clave(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None)
                     
                     #buscando texto de clave
                     for j in range(len(self.lista_tokens)):
@@ -266,17 +305,20 @@ class VentanaPrincipal:
                         if token.lexema == nueva_clave.identificador:
                             if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
                                 nueva_clave.setTexto(self.lista_tokens[j+5].lexema)
-                            else:
-                                pass
-                        else:
-                            pass 
-                        
-                    #buscando alineacion de clave
-                    for j in range(len(self.lista_tokens)):
-                        token = self.lista_tokens[j]
-                        if token.lexema == nueva_clave.identificador:
-                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
                                 nueva_clave.setAlineacion(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nueva_clave.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nueva_clave.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nueva_clave.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nueva_clave.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nueva_clave.setAncho(self.lista_tokens[j+4].lexema)
                             else:
                                 pass
                         else:

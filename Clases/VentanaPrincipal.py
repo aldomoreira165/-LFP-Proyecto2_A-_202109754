@@ -139,8 +139,8 @@ class VentanaPrincipal:
                 token = self.lista_tokens[i]
                 #contenedores
                 if token.numero == 3 and (token.lexema == 'Contenedor' or token.lexema == 'contenedor'):
-                    nuevo_contenedor = Contenedor(self.lista_tokens[i+1].lexema, None, None, None, None, None)
-                    #buscando texto de etiqueta
+                    nuevo_contenedor = Contenedor(self.lista_tokens[i+1].lexema, None, None, None, None, None, False)
+                    
                     for j in range(len(self.lista_tokens)):
                         token = self.lista_tokens[j]
                         if token.lexema == nuevo_contenedor.identificador:
@@ -153,7 +153,11 @@ class VentanaPrincipal:
                                 nuevo_contenedor.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nuevo_contenedor.setAncho(self.lista_tokens[j+4].lexema)
-                        
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'add' or self.lista_tokens[j+2].lexema == 'Add'):
+                                #buscando elemento
+                                nuevo_contenedor.setContenido(self.lista_tokens[j+4].lexema)
+
+                       
                     lista_contenedores.append(nuevo_contenedor)
                     
                 #etiquetas
@@ -287,7 +291,22 @@ class VentanaPrincipal:
                                 nueva_clave.setAncho(self.lista_tokens[j+4].lexema)
 
                     lista_claves.append(nueva_clave)
-                        
+         
+            #this     
+            for i in range(len(self.lista_tokens)):
+                token = self.lista_tokens[i]
+                if token.lexema == 'this' or token.lexema == 'This': 
+                    if self.lista_tokens[i+2].lexema == 'add' or self.lista_tokens[i+2].lexema == 'Add':
+                        nombre = self.lista_tokens[i+4].lexema
+                        #buscando componente
+                        #contenedores
+                        for con in lista_contenedores:
+                            if con.identificador == nombre:
+                                con.setPagina()
+                                
+            for lista in lista_contenedores:
+                print(lista.identificador, lista.contieneA)
+                  
             lenguaje_objeto = LenguajeObjeto()
             lenguaje_objeto.generarCSS(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)
             lenguaje_objeto.generarHTML(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)

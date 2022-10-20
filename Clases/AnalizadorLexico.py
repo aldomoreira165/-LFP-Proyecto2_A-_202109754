@@ -99,6 +99,8 @@ class AnalizadorLexico():
                 self.agregar_token(3, 'Control', self.buffer)
             elif self.buffer.lower() in self.colocaciones:
                 self.agregar_token(4, 'Posicion', self.buffer)
+            elif self.buffer.lower() == 'this':
+                self.agregar_token(5, 'Identificador', self.buffer)
             else:
                 self.agregar_token(5, 'Identificador', self.buffer)
             self.estado = 0

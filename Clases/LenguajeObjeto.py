@@ -13,9 +13,16 @@ class LenguajeObjeto:
             archivo.write('<body>\n')
             
             for contenedor in contenedores:
-                archivo.write(f'    <div id="{contenedor.identificador}">\n')
-                archivo.write('     </div>\n')
-                
+                #agregando al html los div externos
+                if contenedor.enPagina == True:
+                    archivo.write(f'    <div id="{contenedor.identificador}">\n')
+                    if len(contenedor.contieneA) > 0:
+                        for contenido in contenedor.contieneA:
+                            archivo.write(f'        <div id="{contenido}">\n')  
+                            archivo.write('         </div>\n')
+                        archivo.write('     </div>\n')
+                    archivo.write('     </div>\n')
+                    
             for etiqueta in etiquetas:
                 archivo.write(f'    <label id="{etiqueta.identificador}">{etiqueta.texto}</label>\n')
                 

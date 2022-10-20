@@ -5,7 +5,7 @@ class LenguajeObjeto:
         self.nombre = None
 
     def generarHTML(self, contenedores, etiquetas, botones, textos, areasTexto, claves):
-        with open('Salida/index.html', 'w') as archivo:
+        with open('../Salida/index.html', 'w') as archivo:
             archivo.write('<html>\n')
             archivo.write('<head>\n')
             archivo.write('<link href="prueba.css" rel="stylesheet" type="text/css"/>\n')
@@ -35,7 +35,7 @@ class LenguajeObjeto:
             archivo.write('</html\n')
             
     def generarCSS(self, contenedores, etiquetas, botones, textos, areasTexto, claves):
-        with open('Salida/prueba.css', 'w') as archivo:
+        with open('../Salida/prueba.css', 'w') as archivo:
             
             for etiqueta in etiquetas:
                 archivo.write(f'#{etiqueta.identificador}' + '{\n')

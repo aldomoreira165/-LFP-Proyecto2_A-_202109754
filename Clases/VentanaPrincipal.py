@@ -9,13 +9,13 @@ from AnalizadorSintactico import AnalizadorSintactico
 from VentanaTokens import VentanaTokens
 from VentanaErrores import VentanaErrores
 from LenguajeObjeto import LenguajeObjeto
-from Contenedor import Contenedor
-from Etiqueta import Etiqueta
-from Check import Check
-from Boton import Boton
-from Texto import Texto
-from AreaTexto import AreaTexto
-from Clave import Clave
+from Elementos.Contenedor import Contenedor
+from Elementos.Etiqueta import Etiqueta
+from Elementos.Check import Check
+from Elementos.Boton import Boton
+from Elementos.Texto import Texto
+from Elementos.AreaTexto import AreaTexto
+from Elementos.Clave import Clave
 
 class VentanaPrincipal:
     
@@ -26,8 +26,7 @@ class VentanaPrincipal:
         self.scrolledtext1 = st.ScrolledText(self.ventana, width=70, height=35)
         self.scrolledtext1.grid(column=0, row=0, padx=20, pady=20)
         tk.Wm.title(self.ventana, f'Creador de páginas web')
-        self.ventana.mainloop()
-        
+        self.ventana.mainloop()    
         #variables para el manejo de archivos a nivel global
         self.lista_tokens = []
         self.lista_errores = []
@@ -44,22 +43,18 @@ class VentanaPrincipal:
         menu_archivo.add_command(label='Guardar Como', command=self.guardar_como)
         menu_archivo.add_command(label='Salir', command=self.salir)
         barra_menus.add_cascade(menu=menu_archivo, label='Archivo')
-        
         #cascada de menu analisis
         menu_analisis = tk.Menu(barra_menus, tearoff=False)
         menu_analisis.add_command(label='Generar Página Web', command=self.generar_pagina_web)
         barra_menus.add_cascade(menu=menu_analisis, label='Análisis')
-        
         #cascada de menu tokens
         menu_tokens = tk.Menu(barra_menus, tearoff=False)
         menu_tokens.add_cascade(label='Ver Tokens', command=self.abrir_ventana_tokens)
         barra_menus.add_cascade(menu=menu_tokens, label='Tokens')
-        
         #cascada de menu errores
         menu_errores = tk.Menu(barra_menus, tearoff=False)
         menu_errores.add_cascade(label='Ver Errores', command=self.abrir_ventana_errores)
         barra_menus.add_cascade(menu=menu_errores, label='Errores')
-        
         self.ventana.config(menu=barra_menus, bg='#8FEBD6')
 
     def salir(self):
@@ -67,11 +62,8 @@ class VentanaPrincipal:
         
     def nuevo(self):
         respuesta = mb.askquestion(title='Guardar', message='¿Desea guardar el archivo?')
-        
         if respuesta == 'yes':
             self.guardar_como()
-        else:
-            pass
         self.scrolledtext1.delete('1.0', tk.END)   
         
     def guardar_como(self):
@@ -110,19 +102,15 @@ class VentanaPrincipal:
     def generar_pagina_web(self):
         self.lista_tokens.clear()
         self.lista_errores.clear()
-        
         #obteniendo contenido del archivo abierto
         self.archivo = open(self.nombre_archivo, 'r', encoding='utf-8')
         contenido = self.archivo.read()
         self.archivo.close()
-        
         #realizando analisis lexico
         analizador_lexico = AnalizadorLexico(contenido)
         analizador_lexico.analizar()
-        
         #obteniendo lista de tokens del analisis lexico
         self.lista_tokens += analizador_lexico.obtener_lista_tokens()
-        
         #obteniendo lista de errores del analisis léxico
         self.lista_errores += analizador_lexico.obtener_lista_errores()
 
@@ -133,11 +121,10 @@ class VentanaPrincipal:
         #creando analizador sintáctico y enviandole la lista de tokens
         analizador_sintactico = AnalizadorSintactico(tokens)
         analizador_sintactico.analizar()
-        self.lista_errores += analizador_sintactico.obtener_lista_errores()
+        self.lista_errores += analizador_sintactico.obtener_lista_errores() 
         
         if len(self.lista_errores) == 0:
             tk.messagebox.showinfo(message="Archivo compilado correctamente.", title="Éxito")
-            
             #creando archivos de salida
             lista_etiquetas = []
             lista_botones = []
@@ -147,13 +134,12 @@ class VentanaPrincipal:
             lista_areasTexto = []
             lista_claves = []
             lista_contenedores = []
+            
             for i in range(len(self.lista_tokens)):
                 token = self.lista_tokens[i]
-                
                 #contenedores
                 if token.numero == 3 and (token.lexema == 'Contenedor' or token.lexema == 'contenedor'):
                     nuevo_contenedor = Contenedor(self.lista_tokens[i+1].lexema, None, None, None, None, None)
-                    
                     #buscando texto de etiqueta
                     for j in range(len(self.lista_tokens)):
                         token = self.lista_tokens[j]
@@ -167,10 +153,6 @@ class VentanaPrincipal:
                                 nuevo_contenedor.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nuevo_contenedor.setAncho(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass
                         
                     lista_contenedores.append(nuevo_contenedor)
                     
@@ -196,11 +178,7 @@ class VentanaPrincipal:
                                 nueva_etiqueta.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nueva_etiqueta.setAncho(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass                   
-                    
+                                  
                     lista_etiquetas.append(nueva_etiqueta)
                     
                 #botones
@@ -227,11 +205,7 @@ class VentanaPrincipal:
                                 nuevo_boton.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nuevo_boton.setAncho(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass 
-                        
+
                     lista_botones.append(nuevo_boton)
                     
                 #texto 
@@ -258,10 +232,6 @@ class VentanaPrincipal:
                                 nuevo_texto.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nuevo_texto.setAncho(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass 
                     
                     lista_textos.append(nuevo_texto)
                     
@@ -288,11 +258,7 @@ class VentanaPrincipal:
                                 nueva_areatexto.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nueva_areatexto.setAncho(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass
-                        
+                                
                     lista_areasTexto.append(nueva_areatexto)
                     
                 #claves
@@ -319,11 +285,7 @@ class VentanaPrincipal:
                                 nueva_clave.setAlto(self.lista_tokens[j+4].lexema)
                             elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
                                 nueva_clave.setAncho(self.lista_tokens[j+4].lexema)
-                            else:
-                                pass
-                        else:
-                            pass
-                        
+
                     lista_claves.append(nueva_clave)
                         
             lenguaje_objeto = LenguajeObjeto()

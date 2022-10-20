@@ -1,4 +1,5 @@
 
+
 class AreaTexto:
     
     def __init__ (self, identificador, texto, alineacion, colorLetra, colorFondo, x, y, ancho, alto):
@@ -14,6 +15,7 @@ class AreaTexto:
         
     def setTexto(self, texto):
         self.texto = texto
+        
         
     def setAlineacion(self, alineacion):
         if alineacion == 'Centro':

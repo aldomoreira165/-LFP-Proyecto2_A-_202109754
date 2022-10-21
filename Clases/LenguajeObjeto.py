@@ -18,14 +18,14 @@ class LenguajeObjeto:
                     archivo.write(f'    <div id="{contenedor.identificador}">\n')
                     if len(contenedor.contieneA) > 0:
                         for contenido in contenedor.contieneA:
-                            archivo.write(f'        <div id="{contenido}">\n')  
-                            archivo.write('         </div>\n')
+                                archivo.write(f'        <div id="{contenido}">\n')  
+                                archivo.write('         </div>\n')
                         archivo.write('     </div>\n')
                     archivo.write('     </div>\n')
-                    
+                                        
             for etiqueta in etiquetas:
                 archivo.write(f'    <label id="{etiqueta.identificador}">{etiqueta.texto}</label>\n')
-                
+               
             for boton in botones:
                 archivo.write(f'    <input type="submit" id="{boton.identificador}" value="{boton.texto}" style="text-align:{boton.alineacion}"/>\n')
                 

@@ -114,6 +114,7 @@ class VentanaPrincipal:
         #obteniendo lista de errores del analisis léxico
         self.lista_errores += analizador_lexico.obtener_lista_errores()
 
+        #lista de tokens secundaria para enviar al analizador sintactico
         tokens = []
         for i in range (len(self.lista_tokens)):
             tokens.append(self.lista_tokens[i])
@@ -125,7 +126,7 @@ class VentanaPrincipal:
         
         if len(self.lista_errores) == 0:
             tk.messagebox.showinfo(message="Archivo compilado correctamente.", title="Éxito")
-            #creando archivos de salida
+            #creando listas de los diferentes controles en el archivo de entrada
             lista_etiquetas = []
             lista_botones = []
             lista_checks = []
@@ -135,6 +136,7 @@ class VentanaPrincipal:
             lista_claves = []
             lista_contenedores = []
             
+            #analizando la lista de tokens para identificar sus propiedades y posicion para html y css
             for i in range(len(self.lista_tokens)):
                 token = self.lista_tokens[i]
                 #contenedores
@@ -157,7 +159,6 @@ class VentanaPrincipal:
                                 #buscando elemento
                                 nuevo_contenedor.setContenido(self.lista_tokens[j+4].lexema)
 
-                       
                     lista_contenedores.append(nuevo_contenedor)
                     
                 #etiquetas
@@ -292,7 +293,7 @@ class VentanaPrincipal:
 
                     lista_claves.append(nueva_clave)
          
-            #this     
+            #verificando los controles que estan en la pagina principal --this.add(ID)   
             for i in range(len(self.lista_tokens)):
                 token = self.lista_tokens[i]
                 if token.lexema == 'this' or token.lexema == 'This': 
@@ -306,6 +307,19 @@ class VentanaPrincipal:
                                 
             for lista in lista_contenedores:
                 print(lista.identificador, lista.contieneA)
+                
+            #asignando objetos contenidos dentro de contenedor
+            for c in lista_contenedores:
+                if len(c.contieneA) > 0:
+                    for idControl in c.contieneA:
+                        for i in range(len(lista_contenedores)):
+                            if lista_contenedores[i].identificador == idControl:
+                                idControl = lista_contenedores[i]
+                                break
+                        """for i in range(len(lista_botones)):
+                            if lista_botones[i].identificador == idControl:
+                                idControl = lista_botones[i]
+                                break"""
                   
             lenguaje_objeto = LenguajeObjeto()
             lenguaje_objeto.generarCSS(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)

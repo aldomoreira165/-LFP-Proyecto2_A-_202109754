@@ -369,19 +369,16 @@ class VentanaPrincipal:
                         for con in lista_contenedores:
                             if con.identificador == nombre:
                                 con.setPagina()
-                                
-            for lista in lista_contenedores:
-                print(lista.identificador, lista.contieneA)
-                
+                                  
             #asignando objetos contenidos dentro de contenedor
-            for c in lista_contenedores:
+            """for c in lista_contenedores:
                 if len(c.contieneA) > 0:
                     for idControl in c.contieneA:
                         for i in range(len(lista_contenedores)):
                             if lista_contenedores[i].identificador == idControl:
                                 idControl = lista_contenedores[i]
                                 break
-                        """for i in range(len(lista_botones)):
+                        for i in range(len(lista_botones)):
                             if lista_botones[i].identificador == idControl:
                                 idControl = lista_botones[i]
                                 break"""

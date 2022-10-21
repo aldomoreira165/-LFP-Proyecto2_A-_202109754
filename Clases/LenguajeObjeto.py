@@ -5,7 +5,7 @@ class LenguajeObjeto:
     
     def __init__ (self):
         self.nombre = None
-
+        
     def generarHTML(self, contenedores, etiquetas, botones, textos, areasTexto, claves, checks, radios):
         with open('../Salida/index.html', 'w') as archivo:
             archivo.write('<html>\n')

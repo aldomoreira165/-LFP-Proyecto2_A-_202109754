@@ -1,5 +1,6 @@
 import tkinter as tk
 import sys
+import webbrowser
 from tkinter import scrolledtext as st
 from tkinter.font import BOLD
 from tkinter import filedialog as fd
@@ -16,6 +17,7 @@ from Elementos.Boton import Boton
 from Elementos.Texto import Texto
 from Elementos.AreaTexto import AreaTexto
 from Elementos.Clave import Clave
+from Elementos.RadioBoton import RadioBoton
 
 class VentanaPrincipal:
     
@@ -239,7 +241,8 @@ class VentanaPrincipal:
                                 nuevo_texto.setAncho(self.lista_tokens[j+4].lexema)
                     
                     lista_textos.append(nuevo_texto)
-                    
+                 
+                #area de texto    
                 elif token.numero == 3 and (token.lexema == 'AreaTexto' or token.lexema == 'areatexto'):
                     nueva_areatexto = AreaTexto(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None)
                     
@@ -292,6 +295,68 @@ class VentanaPrincipal:
                                 nueva_clave.setAncho(self.lista_tokens[j+4].lexema)
 
                     lista_claves.append(nueva_clave)
+                    
+                #check
+                elif token.numero == 3 and (token.lexema == 'Check' or token.lexema == 'check'):
+                    nuevo_check = Check(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None, None, None)
+                    
+                    #buscando propiedades
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_check.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nuevo_check.setTexto(self.lista_tokens[j+5].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nuevo_check.setAlineacion(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_check.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_check.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nuevo_check.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nuevo_check.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nuevo_check.setAncho(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setMarcada' or self.lista_tokens[j+2].lexema == 'setmarcada'):
+                                nuevo_check.setMarcada(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setGrupo' or self.lista_tokens[j+2].lexema == 'setgrupo'):
+                                nuevo_check.setGrupo(self.lista_tokens[j+4].lexema)
+
+                    lista_checks.append(nuevo_check)
+                    
+                #radioboton
+                elif token.numero == 3 and (token.lexema == 'RadioBoton' or token.lexema == 'radioboton'):
+                    nuevo_radio = RadioBoton(self.lista_tokens[i+1].lexema, None, None, None, None, None, None, None, None, None, None)
+                    
+                    #buscando propiedades
+                    for j in range(len(self.lista_tokens)):
+                        token = self.lista_tokens[j]
+                        if token.lexema == nuevo_radio.identificador:
+                            if self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setTexto' or self.lista_tokens[j+2].lexema == 'settexto'):
+                                nuevo_radio.setTexto(self.lista_tokens[j+5].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlineacion' or self.lista_tokens[j+2].lexema == 'setalineacion'):
+                                nuevo_radio.setAlineacion(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorLetra' or self.lista_tokens[j+2].lexema == 'setcolorletra'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_radio.setColorLetra(color)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setColorFondo' or self.lista_tokens[j+2].lexema == 'setcolorfondo'):
+                                color = self.lista_tokens[j+4].lexema + self.lista_tokens[j+5].lexema + self.lista_tokens[j+6].lexema + self.lista_tokens[j+7].lexema + self.lista_tokens[j+8].lexema
+                                nuevo_radio.setColorFondo(color)
+                            elif self.lista_tokens[j+2].tipo == 'Posicion' and (self.lista_tokens[j+2].lexema == 'setPosicion' or self.lista_tokens[j+2].lexema == 'setPosicion'):
+                                nuevo_check.setPosicion(self.lista_tokens[j+4].lexema, self.lista_tokens[j+6].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAlto' or self.lista_tokens[j+2].lexema == 'setalto'):
+                                nuevo_radio.setAlto(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setAncho' or self.lista_tokens[j+2].lexema == 'setancho'):
+                                nuevo_radio.setAncho(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setMarcada' or self.lista_tokens[j+2].lexema == 'setmarcada'):
+                                nuevo_radio.setMarcada(self.lista_tokens[j+4].lexema)
+                            elif self.lista_tokens[j+2].tipo == 'Propiedad' and (self.lista_tokens[j+2].lexema == 'setGrupo' or self.lista_tokens[j+2].lexema == 'setgrupo'):
+                                nuevo_radio.setGrupo(self.lista_tokens[j+4].lexema)
+
+                    lista_radioBotones.append(nuevo_radio)
          
             #verificando los controles que estan en la pagina principal --this.add(ID)   
             for i in range(len(self.lista_tokens)):
@@ -322,9 +387,9 @@ class VentanaPrincipal:
                                 break"""
                   
             lenguaje_objeto = LenguajeObjeto()
-            lenguaje_objeto.generarCSS(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)
-            lenguaje_objeto.generarHTML(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves)
+            lenguaje_objeto.generarCSS(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves, lista_checks, lista_radioBotones)
+            lenguaje_objeto.generarHTML(lista_contenedores, lista_etiquetas, lista_botones, lista_textos, lista_areasTexto, lista_claves, lista_checks, lista_radioBotones)
         else:
             tk.messagebox.showerror(message="El archivo contiene errores.", title="Error")
-            
+              
 ventana = VentanaPrincipal()

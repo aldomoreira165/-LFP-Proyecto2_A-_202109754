@@ -1,10 +1,12 @@
+import os
+import webbrowser
 
 class LenguajeObjeto:
     
     def __init__ (self):
         self.nombre = None
 
-    def generarHTML(self, contenedores, etiquetas, botones, textos, areasTexto, claves):
+    def generarHTML(self, contenedores, etiquetas, botones, textos, areasTexto, claves, checks, radios):
         with open('../Salida/index.html', 'w') as archivo:
             archivo.write('<html>\n')
             archivo.write('<head>\n')
@@ -38,10 +40,16 @@ class LenguajeObjeto:
             for clave in claves:
                 archivo.write(f'    <input type="password" id="{clave.identificador}" value="{clave.texto}" style="text-align:{clave.alineacion}"/>\n')
                 
+            for check in checks:
+                archivo.write(f'    <input type="checkbox" id="{check.identificador}" {check.marcada}/>{check.texto}\n')
+                
+            for radio in radios:
+                archivo.write(f'    <input type="radio" name="{radio.grupo}" id="{radio.identificador}" {radio.marcada}/>{radio.texto}\n')
+                
             archivo.write('</body>\n')
             archivo.write('</html\n')
-            
-    def generarCSS(self, contenedores, etiquetas, botones, textos, areasTexto, claves):
+                       
+    def generarCSS(self, contenedores, etiquetas, botones, textos, areasTexto, claves, checks, radios):
         with open('../Salida/prueba.css', 'w') as archivo:
             
             for etiqueta in etiquetas:
@@ -112,6 +120,30 @@ class LenguajeObjeto:
                 archivo.write(f'height:{areaTexto.alto}px;\n')
                 archivo.write(f'color:rgb({areaTexto.colorLetra});\n')
                 archivo.write(f'background-color:rgb({areaTexto.colorFondo});\n')
+                archivo.write(f'font-size:12px;\n')
+                archivo.write('}\n')
+                
+            for check in checks:
+                archivo.write(f'#{check.identificador}' + '{\n')
+                archivo.write('position:absolute;\n')
+                archivo.write(f'top:{check.y}px;\n')
+                archivo.write(f'left:{check.x}px;\n')
+                archivo.write(f'width:{check.ancho}px;\n')
+                archivo.write(f'height:{check.alto}px;\n')
+                archivo.write(f'color:rgb({check.colorLetra});\n')
+                archivo.write(f'background-color:rgb({check.colorFondo});\n')
+                archivo.write(f'font-size:12px;\n')
+                archivo.write('}\n')
+                
+            for radio in radios:
+                archivo.write(f'#{radio.identificador}' + '{\n')
+                archivo.write('position:absolute;\n')
+                archivo.write(f'top:{radio.y}px;\n')
+                archivo.write(f'left:{radio.x}px;\n')
+                archivo.write(f'width:{radio.ancho}px;\n')
+                archivo.write(f'height:{radio.alto}px;\n')
+                archivo.write(f'color:rgb({radio.colorLetra});\n')
+                archivo.write(f'background-color:rgb({radio.colorFondo});\n')
                 archivo.write(f'font-size:12px;\n')
                 archivo.write('}\n')
             
